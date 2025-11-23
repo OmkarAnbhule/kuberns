@@ -56,10 +56,16 @@ export function AuthSync() {
                            currentState.user.id !== userData.id;
 
         if (needsUpdate) {
+          // Normalize avatar field - GitHub API might use avatar_url, avatarUrl, or picture
+          const normalizedUser = {
+            ...userData,
+            avatar: userData.avatar || userData.avatar_url || userData.avatarUrl || userData.picture,
+          };
+          
           // Set user in Redux - token will be handled by proxy via httpOnly cookie
           // We use a placeholder token value since we can't read the httpOnly cookie
           dispatch(setUser({ 
-            user: userData, 
+            user: normalizedUser, 
             token: "httpOnly", // Placeholder - actual token is in httpOnly cookie
             refreshToken: refreshToken || undefined
           }));

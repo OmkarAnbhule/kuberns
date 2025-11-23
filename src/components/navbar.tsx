@@ -15,6 +15,7 @@ import { useAppSelector, useAppDispatch } from "@/lib/hooks";
 import { clearUser } from "@/lib/slices/authSlice";
 import { useRouter, usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Logo } from "@/components/logo";
 import { motion } from "framer-motion";
 
 export function Navbar() {
@@ -45,14 +46,7 @@ export function Navbar() {
       {/* Top Layer */}
       <div className="container mx-auto flex h-16 items-center justify-between px-4 border-b border-border/50">
         {/* Left: Logo */}
-        <div className="flex items-center">
-          <h1 
-            className="text-xl font-bold cursor-pointer hover:text-primary transition-colors"
-            onClick={() => router.push("/")}
-          >
-            Kuberns
-          </h1>
-        </div>
+        <Logo size="md" />
 
         {/* Middle: Search Bar */}
         <div className="relative flex-1 max-w-2xl mx-8 hidden md:block">
@@ -86,7 +80,16 @@ export function Navbar() {
             <DropdownMenuTrigger asChild>
               <button className="flex items-center gap-2 rounded-full focus:outline-none focus:ring-2 focus:ring-ring">
                 <Avatar>
-                  <AvatarImage src={user?.avatar} alt={user?.name || "User"} />
+                  <AvatarImage 
+                    src={
+                      user?.avatar || 
+                      (user as any)?.avatar_url || 
+                      (user as any)?.avatarUrl || 
+                      (user as any)?.picture || 
+                      undefined
+                    } 
+                    alt={user?.name || "User"} 
+                  />
                   <AvatarFallback>
                     {user?.name?.charAt(0).toUpperCase() || "U"}
                   </AvatarFallback>

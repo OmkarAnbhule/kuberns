@@ -11,8 +11,14 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Kubern Frontend",
-  description: "Kuberns management frontend",
+  title: "Kuberns - Cloud Deployment Platform",
+  description: "Deploy and manage your applications with ease",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", type: "image/x-icon" },
+    ],
+  },
 };
 
 export default function RootLayout({

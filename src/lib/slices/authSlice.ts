@@ -5,6 +5,10 @@ interface User {
   name: string;
   email: string;
   avatar?: string;
+  avatar_url?: string;
+  avatarUrl?: string;
+  picture?: string;
+  [key: string]: any; // Allow additional fields from backend
 }
 
 interface AuthState {

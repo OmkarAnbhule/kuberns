@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ErrorAlert } from "@/components/error-alert";
+import { Logo } from "@/components/logo";
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 
@@ -39,11 +40,16 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="w-full max-w-md space-y-6 p-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold">Welcome Back</h1>
-          <p className="text-muted-foreground">
-            Sign in to continue to Kubern
-          </p>
+        <div className="text-center space-y-4">
+          <div className="flex justify-center">
+            <Logo size="lg" />
+          </div>
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold">Welcome Back</h1>
+            <p className="text-muted-foreground">
+              Sign in to continue to Kuberns
+            </p>
+          </div>
         </div>
         
         {displaySessionExpired && (
