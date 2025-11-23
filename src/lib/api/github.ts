@@ -136,7 +136,7 @@ export async function getGitHubRepositories(): Promise<Array<{ value: string; la
         owner: String(owner),
         id: repo.id ? Number(repo.id) : undefined,
       };
-    }).filter((item): item is { value: string; label: string; full_name: string; owner: string; id?: number } => item !== null);
+    }).filter((item): item is { value: string; label: string; full_name: string; owner: string; id: number | undefined } => item !== null);
     
     console.log("Mapped repositories:", mappedRepos);
     console.log("Mapped repositories count:", mappedRepos.length);
