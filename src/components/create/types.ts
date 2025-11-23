@@ -42,7 +42,28 @@ export const formSchema = z
   .refine(
     (data) => {
       if (data.vcs !== "demo") {
-        // Organization is optional, but repository and branch are required
+        // Organization, repository, and branch are all required when not in demo mode
+        if (!data.organization || data.organization.trim() === "") {
+          return false;
+        }
+        if (!data.repository || data.repository.trim() === "") {
+          return false;
+        }
+        if (!data.branch || data.branch.trim() === "") {
+          return false;
+        }
+      }
+      return true;
+    },
+    {
+      message: "Organization is required",
+      path: ["organization"],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.vcs !== "demo") {
+        // Repository and branch are required
         return (
           data.repository &&
           data.repository.trim() !== "" &&

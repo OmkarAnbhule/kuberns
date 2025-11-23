@@ -147,7 +147,7 @@ export function VCSSelection({
                       value={organization}
                       onValueChange={(value) => setValue("organization", value)}
                       error={errors.organization?.message}
-                      required={false}
+                      required
                     />
                   )}
 

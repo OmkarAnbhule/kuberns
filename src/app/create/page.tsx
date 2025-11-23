@@ -413,12 +413,12 @@ export default function CreateAppPage() {
         }
       }
 
-      // Build the API payload according to the new structure
-      const payload: any = {
-        name: data.appName,
-        organization: data.organization && data.organization.trim() !== "" ? data.organization : "",
-        repository_name: data.repository ? data.repository.split("/").pop() || "" : "",
-        branch_name: data.branch || "",
+       // Build the API payload according to the new structure
+       const payload: any = {
+         name: data.appName,
+         organization: data.organization || "",
+         repository_name: data.repository ? data.repository.split("/").pop() || "" : "",
+         branch_name: data.branch || "",
         aws_region: data.region,
         template_id: Number(selectedTemplate.id),
         plan_id: Number(selectedPlan.id),
@@ -578,11 +578,12 @@ export default function CreateAppPage() {
 
       // Only check VCS fields if not demo
       if (vcs !== "demo") {
+        const organization = watch("organization");
         const repository = watch("repository");
         const branch = watch("branch");
 
-          // Organization is optional, but repository and branch are required
-          if (!repository || !branch) {
+          // Organization, repository, and branch are all required
+          if (!organization || !repository || !branch) {
           // Trigger validation to show errors
             handleSubmit(() => { }, () => {})();
           return;
