@@ -16,7 +16,7 @@ export const formSchema = z
     appName: z.string().min(1, "App name is required"),
     region: z.string().min(1, "Region is required"),
     template: z.string().min(1, "Template is required"),
-    planType: z.string().min(1, "Plan type is required"),
+    planType: z.number(),
     connectDatabase: z.boolean().default(false),
     databaseConnectionUrl: z.string().optional(),
     // Step 2

@@ -77,7 +77,7 @@ export default function CreateAppPage() {
       appName: "",
       region: "",
       template: "",
-      planType: "1",
+      planType: 1,
       connectDatabase: false,
       databaseConnectionUrl: "",
       portConfig: "random",
