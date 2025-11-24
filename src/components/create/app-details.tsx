@@ -201,16 +201,16 @@ export function AppDetails({
                       cursor-pointer
                       ${selectedPlan === plan.id ? "bg-primary/10" : ""}
                     `}
-                    onClick={() => setValue("planType", plan.id)}
+                    onClick={() => setValue("planType", String(plan.id))}
                   >
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <input
                           type="radio"
                           {...register("planType")}
-                          value={plan.id}
+                          value={String(plan.id)}
                           checked={selectedPlan === plan.id}
-                          onChange={() => setValue("planType", plan.id)}
+                          onChange={() => setValue("planType", String(plan.id))}
                           className="sr-only"
                         />
                         <span className="font-semibold">{plan.name}</span>
