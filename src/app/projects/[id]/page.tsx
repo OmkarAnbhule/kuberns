@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Navbar } from "@/components/navbar";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,7 @@ export default function ProjectDetailPage() {
   const [allInstances, setAllInstances] = useState<Instance[]>([]);
   const [selectedInstanceId, setSelectedInstanceId] = useState<number | null>(null);
   const [showAWSCredentialsModal, setShowAWSCredentialsModal] = useState(false);
+  const previousLogsHashRef = useRef<string | null>(null);
   const [isCreatingInstance, setIsCreatingInstance] = useState(false);
 
   useEffect(() => {
@@ -111,14 +112,32 @@ export default function ProjectDetailPage() {
       if (!targetInstanceId) return null;
 
       // Only show loading if we don't have any logs yet
-      const hasExistingLogs = logs.length > 0;
+      const hasExistingLogs = previousLogsHashRef.current !== null;
       if (!hasExistingLogs) {
         setLoadingLogs(true);
       }
 
       try {
         const logsData = await getInstanceLogs(targetInstanceId, 50);
-        setLogs(logsData);
+        
+        // Create a hash of the logs to compare (using first log's id and timestamp, and total count)
+        const currentLogsHash = logsData.length > 0 
+          ? `${logsData.length}-${logsData[0].id}-${logsData[0].timestamp}`
+          : "empty";
+        
+        // Check if logs have actually changed
+        const logsChanged = previousLogsHashRef.current === null || previousLogsHashRef.current !== currentLogsHash;
+        
+        // Only update logs if they've actually changed
+        if (logsChanged) {
+          setLogs(logsData);
+          previousLogsHashRef.current = currentLogsHash;
+        } else {
+          // Logs are the same, don't update state or show loading
+          setLoadingLogs(false);
+          // Return the latest status without updating state
+          return logsData[0]?.status || null;
+        }
 
         // Extract URL from completed or running logs
         const finishedLog = logsData.find((log) => log.status === "completed" || log.status === "running");
@@ -143,15 +162,18 @@ export default function ProjectDetailPage() {
 
     const targetInstanceId = selectedInstanceId || instanceId;
     if (targetInstanceId) {
+      // Reset previous logs hash when instance changes
+      previousLogsHashRef.current = null;
+      
       // Initial fetch
       fetchLogs().then((latestStatus) => {
-        // Only start polling if status is not completed or running
-        const isFinished = latestStatus === "completed" || latestStatus === "running";
+        // Stop polling if status is failed, completed, or running
+        const isFinished = latestStatus === "failed" || latestStatus === "completed" || latestStatus === "running";
         if (latestStatus && !isFinished) {
           intervalId = setInterval(async () => {
             const status = await fetchLogs();
-            // Stop polling if status becomes completed or running
-            if ((status === "completed" || status === "running") && intervalId) {
+            // Stop polling if status becomes failed, completed, or running
+            if ((status === "failed" || status === "completed" || status === "running") && intervalId) {
               clearInterval(intervalId);
               intervalId = null;
             }
@@ -164,6 +186,7 @@ export default function ProjectDetailPage() {
     return () => {
       if (intervalId) {
         clearInterval(intervalId);
+        intervalId = null;
       }
     };
   }, [selectedInstanceId, instanceId]);
