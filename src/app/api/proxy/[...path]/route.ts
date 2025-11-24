@@ -10,11 +10,19 @@ export async function GET(
 ) {
   try {
     const resolvedParams = await params;
-    let path = resolvedParams.path?.join("/") || "";
-    // Preserve trailing slash if the original request had one
-    if (request.nextUrl.pathname.endsWith("/") && !path.endsWith("/")) {
+    const pathSegments = resolvedParams.path || [];
+    let path = pathSegments.join("/");
+    
+    // Check if the original request URL had a trailing slash
+    const originalUrl = request.url;
+    const urlPath = new URL(originalUrl).pathname;
+    const hasTrailingSlash = urlPath.endsWith("/") || 
+                             (pathSegments.length > 0 && pathSegments[pathSegments.length - 1] === "");
+    
+    if (hasTrailingSlash && !path.endsWith("/") && path !== "") {
       path = path + "/";
     }
+    
     const searchParams = request.nextUrl.searchParams.toString();
     const url = searchParams
       ? `${API_BASE_URL}/${path}?${searchParams}`
@@ -86,12 +94,30 @@ export async function POST(
 ) {
   try {
     const resolvedParams = await params;
-    let path = resolvedParams.path?.join("/") || "";
-    // Preserve trailing slash if the original request had one
-    if (request.nextUrl.pathname.endsWith("/") && !path.endsWith("/")) {
+    const pathSegments = resolvedParams.path || [];
+    let path = pathSegments.join("/");
+    
+    // Check if the original request URL had a trailing slash
+    // Next.js might normalize it, so we check multiple sources
+    const originalUrl = request.url;
+    const urlPath = new URL(originalUrl).pathname;
+    
+    // Also check if the last segment is empty (indicates trailing slash in catch-all route)
+    const hasTrailingSlash = urlPath.endsWith("/") || 
+                             (pathSegments.length > 0 && pathSegments[pathSegments.length - 1] === "");
+    
+    // If we detected a trailing slash, add it to the path
+    if (hasTrailingSlash && !path.endsWith("/") && path !== "") {
       path = path + "/";
     }
+    
     const url = `${API_BASE_URL}/${path}`;
+    console.log("POST Proxy - Original URL:", originalUrl);
+    console.log("POST Proxy - URL Pathname:", urlPath);
+    console.log("POST Proxy - Path segments:", pathSegments);
+    console.log("POST Proxy - Has trailing slash:", hasTrailingSlash);
+    console.log("POST Proxy - Constructed path:", path);
+    console.log("POST Proxy - Final backend URL:", url);
     const token = request.cookies.get("access_token")?.value;
     const body = await request.json();
 
@@ -160,11 +186,19 @@ export async function PUT(
 ) {
   try {
     const resolvedParams = await params;
-    let path = resolvedParams.path?.join("/") || "";
-    // Preserve trailing slash if the original request had one
-    if (request.nextUrl.pathname.endsWith("/") && !path.endsWith("/")) {
+    const pathSegments = resolvedParams.path || [];
+    let path = pathSegments.join("/");
+    
+    // Check if the original request URL had a trailing slash
+    const originalUrl = request.url;
+    const urlPath = new URL(originalUrl).pathname;
+    const hasTrailingSlash = urlPath.endsWith("/") || 
+                             (pathSegments.length > 0 && pathSegments[pathSegments.length - 1] === "");
+    
+    if (hasTrailingSlash && !path.endsWith("/") && path !== "") {
       path = path + "/";
     }
+    
     const url = `${API_BASE_URL}/${path}`;
     const token = request.cookies.get("access_token")?.value;
     const body = await request.json();
@@ -234,11 +268,19 @@ export async function DELETE(
 ) {
   try {
     const resolvedParams = await params;
-    let path = resolvedParams.path?.join("/") || "";
-    // Preserve trailing slash if the original request had one
-    if (request.nextUrl.pathname.endsWith("/") && !path.endsWith("/")) {
+    const pathSegments = resolvedParams.path || [];
+    let path = pathSegments.join("/");
+    
+    // Check if the original request URL had a trailing slash
+    const originalUrl = request.url;
+    const urlPath = new URL(originalUrl).pathname;
+    const hasTrailingSlash = urlPath.endsWith("/") || 
+                             (pathSegments.length > 0 && pathSegments[pathSegments.length - 1] === "");
+    
+    if (hasTrailingSlash && !path.endsWith("/") && path !== "") {
       path = path + "/";
     }
+    
     const searchParams = request.nextUrl.searchParams.toString();
     const url = searchParams
       ? `${API_BASE_URL}/${path}?${searchParams}`

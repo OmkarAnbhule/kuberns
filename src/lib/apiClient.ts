@@ -21,6 +21,8 @@ export async function apiClient(
     // Route through proxy for backend API calls
     // The proxy will automatically include the httpOnly access_token cookie
     url = `/api/proxy/${endpoint.startsWith("/") ? endpoint.slice(1) : endpoint}`;
+    console.log("apiClient - Endpoint:", endpoint);
+    console.log("apiClient - Constructed URL:", url);
   }
 
   const headers: Record<string, string> = {
