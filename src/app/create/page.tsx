@@ -187,7 +187,7 @@ export default function CreateAppPage() {
             setValue("appName", project.name || "");
             setValue("region", project.aws_region || "");
             setValue("template", project.template?.slug || "");
-            setValue("planType", String(project.plan?.id || ""));
+            setValue("planType", project.plan?.id || 1);
             setValue("organization", project.organization || "");
             if (project.repository_name) {
               // Reconstruct full repository path if needed
