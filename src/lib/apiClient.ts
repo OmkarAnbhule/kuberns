@@ -1,3 +1,5 @@
+import { FeatherIcon } from "lucide-react";
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
 
 interface RequestOptions extends RequestInit {
@@ -22,7 +24,7 @@ export async function apiClient(
     // The proxy will automatically include the httpOnly access_token cookie
     url = `/api/proxy/${endpoint.startsWith("/") ? endpoint.slice(1) : endpoint}`;
     console.log("apiClient - Endpoint:", endpoint);
-    console.log("apiClient - Constructed URL:", url);
+    console.log("apiClient - Constructed URL:", url,fetchOptions);
   }
 
   const headers: Record<string, string> = {

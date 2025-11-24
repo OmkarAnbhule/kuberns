@@ -90,7 +90,7 @@ export interface Plan {
 // List all projects
 // Note: token parameter is deprecated - proxy handles httpOnly cookie automatically
 export async function getProjects(): Promise<Project[]> {
-  const data = await apiClientJson<Project[] | { data: Project[] }>("projects/", {
+  const data = await apiClientJson<Project[] | { data: Project[] }>("projects", {
     method: "GET",
   });
   
@@ -125,7 +125,7 @@ export async function createProject(
   payload: CreateProjectPayload,
 ): Promise<Project> {
   try {
-    const data = await apiClientJson<Project | { data: Project }>("projects/", {
+    const data = await apiClientJson<Project | { data: Project }>("projects", {
       method: "POST",
       body: JSON.stringify(payload),
     });
