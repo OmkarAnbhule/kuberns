@@ -38,9 +38,6 @@ export async function getGitHubOrganizations(): Promise<Array<{ value: string; l
       }
     );
     
-    // Debug: log the response structure
-    console.log("GitHub Organizations API Response:", data);
-    
     // Transform to match our format - handle both array and object responses
     let items: any[] = [];
     
@@ -87,9 +84,6 @@ export async function getGitHubRepositories(): Promise<Array<{ value: string; la
         method: "GET",
       }
     );
-    
-    // Debug: log the response structure
-    console.log("GitHub Repositories API Response:", data);
     
     // Transform to match our format - handle both array and object responses
     let items: any[] = [];
@@ -138,9 +132,6 @@ export async function getGitHubRepositories(): Promise<Array<{ value: string; la
       };
     }).filter((item): item is { value: string; label: string; full_name: string; owner: string; id: number | undefined } => item !== null);
     
-    console.log("Mapped repositories:", mappedRepos);
-    console.log("Mapped repositories count:", mappedRepos.length);
-    
     return mappedRepos;
   } catch (error) {
     console.error("Error fetching GitHub repositories:", error);
@@ -161,9 +152,6 @@ export async function getGitHubBranches(
         method: "GET",
       }
     );
-    
-    // Debug: log the response structure
-    console.log("GitHub Branches API Response:", data);
     
     // Transform to match our format - handle both array and object responses
     let items: any[] = [];

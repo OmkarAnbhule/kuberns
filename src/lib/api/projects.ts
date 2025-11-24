@@ -90,7 +90,7 @@ export interface Plan {
 // List all projects
 // Note: token parameter is deprecated - proxy handles httpOnly cookie automatically
 export async function getProjects(): Promise<Project[]> {
-  const data = await apiClientJson<Project[] | { data: Project[] }>("projects", {
+  const data = await apiClientJson<Project[] | { data: Project[] }>("projects/", {
     method: "GET",
   });
   
@@ -125,12 +125,10 @@ export async function createProject(
   payload: CreateProjectPayload,
 ): Promise<Project> {
   try {
-    console.log("Creating project with payload:", payload);
-    const data = await apiClientJson<Project | { data: Project }>("projects", {
+    const data = await apiClientJson<Project | { data: Project }>("projects/", {
       method: "POST",
       body: JSON.stringify(payload),
     });
-    console.log("Create Project Response:", data);
     
     // Handle both direct object and wrapped responses
     if ((data as any).data) {
@@ -187,9 +185,6 @@ export async function getTemplates(): Promise<Template[]> {
       method: "GET",
     });
     
-    // Debug: log the response structure
-    console.log("Templates API Response:", data);
-    
     // Transform to match our format - handle both array and object responses
     let items: any[] = [];
     
@@ -219,9 +214,6 @@ export async function getPlans(): Promise<Plan[]> {
     const data = await apiClientJson<any>("projects/plans", {
       method: "GET",
     });
-    
-    // Debug: log the response structure
-    console.log("Plans API Response:", data);
     
     // Transform to match our format - handle both array and object responses
     let items: any[] = [];

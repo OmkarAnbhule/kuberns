@@ -95,6 +95,12 @@ export default function CreateAppPage() {
   const selectedOrganization = watch("organization");
   const selectedVcs = watch("vcs");
 
+  // Watch all form data and log it
+  const formData = watch();
+  useEffect(() => {
+    console.log("Form Data:", formData);
+  }, [formData]);
+
   // Fetch initial data
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -459,17 +465,27 @@ export default function CreateAppPage() {
         setShowAWSCredentialsModal(true);
       }
     } catch (error: any) {
+      // Log the full error object to debug
+      console.log("onSubmit Error - Full Error Object:", error);
+      console.log("onSubmit Error - Error Message:", error?.message);
+      console.log("onSubmit Error - Error Response:", error?.response);
+      console.log("onSubmit Error - Error Response Data:", error?.response?.data);
+      
       // Extract more detailed error message
       let errorMessage = `Failed to ${projectId ? 'update' : 'create'} project`;
       
       if (error?.message) {
         errorMessage = error.message;
+        console.log("Using error.message:", errorMessage);
       } else if (error?.response?.data?.message) {
         errorMessage = error.response.data.message;
+        console.log("Using error.response.data.message:", errorMessage);
       } else if (typeof error === 'string') {
         errorMessage = error;
+        console.log("Using error as string:", errorMessage);
       }
       
+      console.log("Final Error Message to Display:", errorMessage);
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -632,6 +648,8 @@ export default function CreateAppPage() {
 
           <form onSubmit={handleSubmit(onSubmit, (errors) => {
             // Show validation errors as toast
+            console.log("Form Validation Errors:", errors);
+            
             // Helper function to extract error message
             const getErrorMessage = (error: any): string | null => {
               if (!error) return null;
@@ -656,12 +674,14 @@ export default function CreateAppPage() {
             for (const [field, error] of Object.entries(errors)) {
               const message = getErrorMessage(error);
               if (message) {
+                console.log(`Validation Error - Field: ${field}, Message: ${message}`);
                 toast.error(message);
                 return;
               }
             }
             
             // Fallback message
+            console.log("No specific error message found, using fallback");
             toast.error("Please fill in all required fields correctly");
           })}>
             <AnimatePresence mode="wait">

@@ -38,7 +38,6 @@ export async function GET(request: NextRequest) {
 
     const data = await response.json();
 
-    console.log(data);
     // Store token and user data in cookies
     const redirectResponse = NextResponse.redirect(new URL("/", FRONTEND_BASE_URL));
     

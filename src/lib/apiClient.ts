@@ -46,9 +46,6 @@ export async function apiClient(
       credentials: "include", // Include cookies in the request
     });
 
-    console.log("API Client Request:", { url, method, hasBody: !!fetchOptions.body });
-
-
     // Handle 401 Unauthorized - session expired
     if (response.status === 401) {
       // Clear Redux state
@@ -82,14 +79,18 @@ export async function apiClient(
       let errorMessage = response.statusText;
       try {
         const errorData = await response.clone().json();
+        console.log("API Client Error - Response Data:", errorData);
         errorMessage = errorData.message || errorData.error || JSON.stringify(errorData);
       } catch {
         try {
           errorMessage = await response.text();
+          console.log("API Client Error - Response Text:", errorMessage);
         } catch {
           errorMessage = response.statusText;
+          console.log("API Client Error - Status Text:", errorMessage);
         }
       }
+      console.log("API Client Error - Final Error Message:", errorMessage);
       throw new Error(errorMessage || `API Error: ${response.status}`);
     }
 
@@ -105,7 +106,6 @@ export async function apiClientJson<T>(
 ): Promise<T> {
   try {
     const response = await apiClient(endpoint, options);
-    console.log("API Client JSON Response:", response, options);
     const jsonData = await response.json();
     return jsonData;
   } catch (error) {
