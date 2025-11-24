@@ -125,7 +125,7 @@ export async function GET(
   } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     console.log("GET Proxy - Error occurred:", {
-      url,
+      url: request.url,
       error: errorMessage,
       "cache-status": "error-no-cache",
     });
