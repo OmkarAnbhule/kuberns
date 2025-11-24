@@ -69,15 +69,66 @@ export async function GET(
       return errorResponse;
     }
 
+    // Extract and log cache-related headers
+    const cacheControl = response.headers.get("cache-control");
+    const etag = response.headers.get("etag");
+    const lastModified = response.headers.get("last-modified");
+    const expires = response.headers.get("expires");
+    const age = response.headers.get("age");
+    const vary = response.headers.get("vary");
+    
+    // Log cache information
+    console.log("GET Proxy - Cache Headers:", {
+      url,
+      "cache-control": cacheControl,
+      "etag": etag,
+      "last-modified": lastModified,
+      "expires": expires,
+      "age": age,
+      "vary": vary,
+      "status": response.status,
+      "cacheable": response.status === 200 && !cacheControl?.includes("no-store") && !cacheControl?.includes("no-cache"),
+    });
+    
     const data = await response.json();
     
     if (!response.ok) {
       return NextResponse.json(data, { status: response.status });
     }
     
-    return NextResponse.json(data);
+    // Create response with cache headers
+    const nextResponse = NextResponse.json(data);
+    
+    // Forward cache-related headers from backend
+    if (cacheControl) {
+      nextResponse.headers.set("cache-control", cacheControl);
+      console.log("GET Proxy - Setting cache-control header:", cacheControl);
+    }
+    if (etag) {
+      nextResponse.headers.set("etag", etag);
+      console.log("GET Proxy - Setting etag header:", etag);
+    }
+    if (lastModified) {
+      nextResponse.headers.set("last-modified", lastModified);
+      console.log("GET Proxy - Setting last-modified header:", lastModified);
+    }
+    if (expires) {
+      nextResponse.headers.set("expires", expires);
+      console.log("GET Proxy - Setting expires header:", expires);
+    }
+    if (vary) {
+      nextResponse.headers.set("vary", vary);
+      console.log("GET Proxy - Setting vary header:", vary);
+    }
+    
+    return nextResponse;
   } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    console.log("GET Proxy - Error occurred:", {
+      url,
+      error: errorMessage,
+      "cache-status": "error-no-cache",
+    });
     return NextResponse.json(
       { 
         error: "Proxy request failed", 
@@ -161,6 +212,19 @@ export async function POST(
       return errorResponse;
     }
 
+    // Log cache-related headers for POST (usually not cacheable, but log for debugging)
+    const cacheControl = response.headers.get("cache-control");
+    const etag = response.headers.get("etag");
+    
+    console.log("POST Proxy - Response Headers:", {
+      url,
+      "cache-control": cacheControl,
+      "etag": etag,
+      "status": response.status,
+      "method": "POST",
+      "note": "POST requests are typically not cacheable",
+    });
+    
     const data = await response.json();
     
     if (!response.ok) {
@@ -170,6 +234,11 @@ export async function POST(
     return NextResponse.json(data);
   } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    console.log("POST Proxy - Error occurred:", {
+      url,
+      error: errorMessage,
+      "cache-status": "error-no-cache",
+    });
     return NextResponse.json(
       { 
         error: "Proxy request failed", 
@@ -243,6 +312,19 @@ export async function PUT(
       return errorResponse;
     }
 
+    // Log cache-related headers for PUT
+    const cacheControl = response.headers.get("cache-control");
+    const etag = response.headers.get("etag");
+    
+    console.log("PUT Proxy - Response Headers:", {
+      url,
+      "cache-control": cacheControl,
+      "etag": etag,
+      "status": response.status,
+      "method": "PUT",
+      "note": "PUT requests typically invalidate cache",
+    });
+    
     const data = await response.json();
     
     if (!response.ok) {
@@ -252,6 +334,11 @@ export async function PUT(
     return NextResponse.json(data);
   } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    console.log("PUT Proxy - Error occurred:", {
+      url,
+      error: errorMessage,
+      "cache-status": "error-no-cache",
+    });
     return NextResponse.json(
       { 
         error: "Proxy request failed", 
@@ -326,6 +413,19 @@ export async function DELETE(
       return errorResponse;
     }
 
+    // Log cache-related headers for DELETE
+    const cacheControl = response.headers.get("cache-control");
+    const etag = response.headers.get("etag");
+    
+    console.log("DELETE Proxy - Response Headers:", {
+      url,
+      "cache-control": cacheControl,
+      "etag": etag,
+      "status": response.status,
+      "method": "DELETE",
+      "note": "DELETE requests typically invalidate cache",
+    });
+    
     const data = await response.json();
     
     if (!response.ok) {
@@ -335,6 +435,11 @@ export async function DELETE(
     return NextResponse.json(data);
   } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    console.log("DELETE Proxy - Error occurred:", {
+      url,
+      error: errorMessage,
+      "cache-status": "error-no-cache",
+    });
     return NextResponse.json(
       { 
         error: "Proxy request failed", 
