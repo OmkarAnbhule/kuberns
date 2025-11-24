@@ -235,7 +235,7 @@ export async function POST(
   } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     console.log("POST Proxy - Error occurred:", {
-      url,
+      url: request.url,
       error: errorMessage,
       "cache-status": "error-no-cache",
     });
@@ -335,7 +335,7 @@ export async function PUT(
   } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     console.log("PUT Proxy - Error occurred:", {
-      url,
+      url: request.url,
       error: errorMessage,
       "cache-status": "error-no-cache",
     });
@@ -418,7 +418,7 @@ export async function DELETE(
     const etag = response.headers.get("etag");
     
     console.log("DELETE Proxy - Response Headers:", {
-      url,
+      url: request.url,
       "cache-control": cacheControl,
       "etag": etag,
       "status": response.status,
@@ -436,7 +436,7 @@ export async function DELETE(
   } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     console.log("DELETE Proxy - Error occurred:", {
-      url,
+      url: request.url,
       error: errorMessage,
       "cache-status": "error-no-cache",
     });
