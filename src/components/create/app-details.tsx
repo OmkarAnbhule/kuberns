@@ -199,22 +199,22 @@ export function AppDetails({
                     key={plan.id}
                     className={`
                       cursor-pointer
-                      ${selectedPlan === plan.id ? "bg-primary/10" : ""}
+                      ${selectedPlan === String(plan.id) ? "bg-primary/10" : ""}
                     `}
-                    onClick={() => setValue("planType", plan.id)}
+                    onClick={() => setValue("planType", String(plan.id))}
                   >
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <input
                           type="radio"
                           {...register("planType")}
-                          value={plan.id}
-                          checked={selectedPlan === plan.id}
-                          onChange={() => setValue("planType", plan.id)}
+                          value={String(plan.id)}
+                          checked={selectedPlan === String(plan.id)}
+                          onChange={() => setValue("planType", String(plan.id))}
                           className="sr-only"
                         />
                         <span className="font-semibold">{plan.name}</span>
-                        {selectedPlan === plan.id && (
+                        {selectedPlan === String(plan.id) && (
                           <CheckCircle2 className="h-4 w-4 text-green-500" />
                         )}
                       </div>
