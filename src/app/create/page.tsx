@@ -77,7 +77,7 @@ export default function CreateAppPage() {
       appName: "",
       region: "",
       template: "",
-      planType: 1,
+      planType: "1",
       connectDatabase: false,
       databaseConnectionUrl: "",
       portConfig: "random",
@@ -187,7 +187,7 @@ export default function CreateAppPage() {
             setValue("appName", project.name || "");
             setValue("region", project.aws_region || "");
             setValue("template", project.template?.slug || "");
-            setValue("planType", project.plan?.id || 1);
+            setValue("planType", String(project.plan?.id || ""));
             setValue("organization", project.organization || "");
             if (project.repository_name) {
               // Reconstruct full repository path if needed

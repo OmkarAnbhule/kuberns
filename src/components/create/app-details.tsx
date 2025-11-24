@@ -195,48 +195,48 @@ export function AppDetails({
                 </TableHeader>
                 <TableBody>
                   {planTypes.map((plan) => (
-                    <TableRow
-                      key={plan.id}
-                      className={`
+                  <TableRow
+                    key={plan.id}
+                    className={`
                       cursor-pointer
                       ${selectedPlan === plan.id ? "bg-primary/10" : ""}
                     `}
-                      onClick={() => setValue("planType", plan.id)}
-                    >
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="radio"
-                            {...register("planType")}
-                            value={plan.id}
-                            checked={selectedPlan === plan.id}
-                            onChange={() => setValue("planType", plan.id)}
-                            className="sr-only"
-                          />
-                          <span className="font-semibold">{plan.name}</span>
-                          {selectedPlan === plan.id && (
-                            <CheckCircle2 className="h-4 w-4 text-green-500" />
-                          )}
-                        </div>
-                        <p className="text-xs text-muted-foreground mt-1">
-                          {plan.description}
-                        </p>
-                      </TableCell>
-                      <TableCell className="text-center">{plan.storage_gb} GB</TableCell>
-                      <TableCell className="text-center">{plan.bandwidth_gb} GB</TableCell>
-                      <TableCell className="text-center">
-                        {Number(plan.ram_mb) < 1000
-                          ? `${plan.ram_mb} MB`
-                          : `${(Number(plan.ram_mb) / 1024).toFixed(0)} GB`}
-                      </TableCell>
-                      <TableCell className="text-center">{plan.cpu_cores}</TableCell>
-                      <TableCell className="text-center">{plan.price_monthly} INR</TableCell>
-                      <TableCell className="text-center">{plan.price_hourly} INR</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                    onClick={() => setValue("planType", plan.id)}
+                  >
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="radio"
+                          {...register("planType")}
+                          value={plan.id}
+                          checked={selectedPlan === plan.id}
+                          onChange={() => setValue("planType", plan.id)}
+                          className="sr-only"
+                        />
+                        <span className="font-semibold">{plan.name}</span>
+                        {selectedPlan === plan.id && (
+                          <CheckCircle2 className="h-4 w-4 text-green-500" />
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {plan.description}
+                      </p>
+                    </TableCell>
+                    <TableCell className="text-center">{plan.storage_gb} GB</TableCell>
+                    <TableCell className="text-center">{plan.bandwidth_gb} GB</TableCell>
+                    <TableCell className="text-center">
+                      {Number(plan.ram_mb) < 1000
+                        ? `${plan.ram_mb} MB`
+                        : `${(Number(plan.ram_mb) / 1024).toFixed(0)} GB`}
+                    </TableCell>
+                    <TableCell className="text-center">{plan.cpu_cores}</TableCell>
+                    <TableCell className="text-center">{plan.price_monthly} INR</TableCell>
+                    <TableCell className="text-center">{plan.price_hourly} INR</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
           )}
           {errors.planType && (
             <p className="text-sm text-destructive mt-2">
