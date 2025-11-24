@@ -10,7 +10,11 @@ export async function GET(
 ) {
   try {
     const resolvedParams = await params;
-    const path = resolvedParams.path?.join("/") || "";
+    let path = resolvedParams.path?.join("/") || "";
+    // Preserve trailing slash if the original request had one
+    if (request.nextUrl.pathname.endsWith("/") && !path.endsWith("/")) {
+      path = path + "/";
+    }
     const searchParams = request.nextUrl.searchParams.toString();
     const url = searchParams
       ? `${API_BASE_URL}/${path}?${searchParams}`
@@ -82,7 +86,11 @@ export async function POST(
 ) {
   try {
     const resolvedParams = await params;
-    const path = resolvedParams.path?.join("/") || "";
+    let path = resolvedParams.path?.join("/") || "";
+    // Preserve trailing slash if the original request had one
+    if (request.nextUrl.pathname.endsWith("/") && !path.endsWith("/")) {
+      path = path + "/";
+    }
     const url = `${API_BASE_URL}/${path}`;
     const token = request.cookies.get("access_token")?.value;
     const body = await request.json();
@@ -152,7 +160,11 @@ export async function PUT(
 ) {
   try {
     const resolvedParams = await params;
-    const path = resolvedParams.path?.join("/") || "";
+    let path = resolvedParams.path?.join("/") || "";
+    // Preserve trailing slash if the original request had one
+    if (request.nextUrl.pathname.endsWith("/") && !path.endsWith("/")) {
+      path = path + "/";
+    }
     const url = `${API_BASE_URL}/${path}`;
     const token = request.cookies.get("access_token")?.value;
     const body = await request.json();
@@ -222,7 +234,11 @@ export async function DELETE(
 ) {
   try {
     const resolvedParams = await params;
-    const path = resolvedParams.path?.join("/") || "";
+    let path = resolvedParams.path?.join("/") || "";
+    // Preserve trailing slash if the original request had one
+    if (request.nextUrl.pathname.endsWith("/") && !path.endsWith("/")) {
+      path = path + "/";
+    }
     const searchParams = request.nextUrl.searchParams.toString();
     const url = searchParams
       ? `${API_BASE_URL}/${path}?${searchParams}`
